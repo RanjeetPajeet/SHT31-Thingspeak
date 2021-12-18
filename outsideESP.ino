@@ -21,7 +21,10 @@ WiFiClient client;
 String jsonBuffer1;
 String jsonBuffer2;
 const String serverPath = "http://api.weatherapi.com/v1/current.json?key=0e8c22cc6cb047ea8dc221200210112&q=52340";
-const String OWserverPath = "api.openweathermap.org/data/2.5/weather?lat=41.706&lon=-91.661&appid=480be2db7d1b6c9e2b2c714aa5cf4bc5&units=imperial";
+const String OWserverPath = "http://api.openweathermap.org/data/2.5/weather?lat=41.706&lon=-91.661&appid=480be2db7d1b6c9e2b2c714aa5cf4bc5&units=imperial";
+
+int firstiterate = 0;
+int iterate = 1;
 
 
 
@@ -41,9 +44,6 @@ void setup()
   }
 
   Serial.println(); Serial.println("WiFi connected!"); Serial.println();
-  
-  int firstiterate = 0;
-  int iterate = 1;
 }
 
 
@@ -79,7 +79,7 @@ void loop()
   
   int TMPanalog = 0;
   TMPanalog = analogRead(A0);                       // Read TMP sensor
-  double z = (0.58 * TMPanalog) - 53;               // Convert analog reading to temperature (F) (Includes a +5 degree offset to account for bias error)
+  double z = (0.58 * TMPanalog) - 58;               // Convert analog reading to temperature (F)
   float TMPtemp = (float)z;                         // Convert temperature from type double to type float
   
   float tf = (APItemp1 + APItemp2 + TMPtemp) / 3;   // Average all outside temperature readings

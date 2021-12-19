@@ -16,7 +16,7 @@ const int led = 4;                                            // LED for success
 
 float tempmemory[3];                                          // 15 minute memory for previous temperatures
 
-WiFiClient client;
+
 
 String jsonBuffer1;
 String jsonBuffer2;
@@ -86,6 +86,8 @@ void loop()
   
   if ( firstiterate < 3 )
   {
+    WiFiClient client;
+    delay(100);
     if ( client.connect(server, 80) )               // If connected to api.thingspeak.com, send the data
     {
       delay(100);
@@ -101,12 +103,14 @@ void loop()
       client.print("\n\n");
       client.print(sendData);
       delay(100);
-      client.stop();
     }
+    client.stop();
   }
   
   if ( (iterate % 4) == 0 )
   {
+    WiFiClient client;
+    delay(100);
     if ( client.connect(server, 80) )               // If connected to api.thingspeak.com, send the data
     {
       delay(100);
@@ -123,16 +127,18 @@ void loop()
       client.print("\n\n");
       client.print(sendData);
       delay(100);
-      client.stop();
       sum = 0;
       tavg = 0;
     }
+    client.stop();
     iterate = 0;
     tempmemory[iterate] = tf;
     iterate = 1;
   }
   else if ( (iterate % 4) != 0  &&  firstiterate > 3)
   {
+    WiFiClient client;
+    delay(100);
     if ( client.connect(server, 80) )               // If connected to api.thingspeak.com, send the data
     {
       delay(100);
@@ -149,10 +155,10 @@ void loop()
       client.print("\n\n");
       client.print(sendData);
       delay(100);
-      client.stop();
       sum = 0;
       tavg = 0;
     }
+    client.stop();
     tempmemory[iterate-1] = tf;                     // Store temperature in memory
   }
 

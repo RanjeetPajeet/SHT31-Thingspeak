@@ -35,11 +35,9 @@ void setup()
   Serial.println("WiFi connected!");
   Serial.println();
 
-  Serial.println("SHT31 test");
-
   if ( ! sht31.begin(0x44) )                      // Set to 0x45 for alternate I2C address
   {
-    Serial.println("Couldn't find SHT31");
+    Serial.println("Couldn't connect to SHT31");
     while (1) delay(1);
   }
 }
@@ -55,8 +53,8 @@ void loop()
 
   if ( client.connect(server, 80) )               // "184.106.153.149" or api.thingspeak.com
   {
+    delay(100);
     String sendData = apiKey+"&field1="+String(tf)+"&field3="+String(h)+"\r\n\r\n";
-
     client.print("POST /update HTTP/1.1\n");
     client.print("Host: api.thingspeak.com\n");
     client.print("Connection: close\n");
@@ -68,18 +66,6 @@ void loop()
     client.print(sendData);   
   }
 
-  if ( ! isnan(t) )                               // Check if 'is not a number'
-  {
-    Serial.print("Temp *F = "); Serial.println(tf);
-  } else if ( isnan(t) ) Serial.println("Failed to read temperature!");
-  
-  if ( ! isnan(h) )                               // Check if 'is not a number'
-  {
-    Serial.print("Humidity % = ");
-    Serial.println(h);
-  } else if ( isnan(h) ) Serial.println("Failed to read humidity!");
-
-  Serial.println();
   delay(300000);                                   // Wait 5 minutes
   
 }

@@ -4,14 +4,14 @@
 
 const char* ssid = "Not Creepy Van Outside";      // WiFi name
 const char* password = "Athlete99!";              // WiFi password
-const char* host = "192.168.1.3";                 // Local ESP8266 IP
+const char* host = "192.168.1.4";                 // Local ESP8266 IP
 const char* TSserver = "api.thingspeak.com";      // Thingspeak API server
 const String apiKey = "8C5RJLITHO074GJ5";         // Thingspeak write API key
 
 const int relayPin = 5;                           // Relay signal wire connected to pin D1 on ESP (D1 = GPIO 5)
 const int port = 420;                             // Port through which requests are routed through
 
-WiFiServer server(port);
+WiFiServer server(420);
 
 bool stateChange = false;
 int state;
@@ -59,10 +59,11 @@ void loop()
 
     if ( client )
     {
-      delay(50);
+      delay(100);
   
       if ( client.available() )
       {
+        delay(100);
         String req = client.readStringUntil('\r');      // Read first line of request
         client.flush();
   
@@ -101,23 +102,23 @@ void loop()
   
         client.flush();
         client.print(s);                                // Send the response to the client
-        delay(1);
+        delay(100);
         client.stop();
       }    
     }
   }
 
+  
   else if ( stateChange = true )                        // Send updated heater state to Thingspeak
   {
+    WiFiClient client;
+    delay(100);
     for ( int c = 0; c < 3; c++ )                       // Spam 3 times
     {
-      client.stop();
-      delay(100);
-      WiFiClient client;
-      Serial.print("Value of 'state': "); Serial.println(state);
       if ( client.connect(TSserver, 80) )
       {
-        String sendData = apiKey+"&field4="+String(state)+"\r\n\r\n";
+        delay(100);
+        String sendData = apiKey+"&field4="+String(state)+"&field5="+String(state)+"\r\n\r\n";
         client.print("POST /update HTTP/1.1\n");
         client.print("Host: api.thingspeak.com\n");
         client.print("Connection: close\n");
@@ -126,10 +127,12 @@ void loop()
         client.print("Content-Length: ");
         client.print(sendData.length());
         client.print("\n\n");
-        client.print(sendData);  
+        client.print(sendData);
+        delay(100); 
       }
     stateChange = false;
-    client.stop();
+    delay(1000);
+    }
+  client.stop();
   }
-  
 }

@@ -109,21 +109,25 @@ void loop()
 
   else if ( stateChange = true )                        // Send updated heater state to Thingspeak
   {
-    WiFiClient client;
-    Serial.print("Value of 'state': "); Serial.println(state);
-    if ( client.connect(TSserver, 80) )
+    for ( int c = 0; c < 3; c++ )                       // Spam 3 times
     {
-      String sendData = apiKey+"&field4="+String(state)+"\r\n\r\n";
-      client.print("POST /update HTTP/1.1\n");
-      client.print("Host: api.thingspeak.com\n");
-      client.print("Connection: close\n");
-      client.print("X-THINGSPEAKAPIKEY: "+apiKey+"\n");
-      client.print("Content-Type: application/x-www-form-urlencoded\n");
-      client.print("Content-Length: ");
-      client.print(sendData.length());
-      client.print("\n\n");
-      client.print(sendData);  
-    }
+      client.stop();
+      delay(100);
+      WiFiClient client;
+      Serial.print("Value of 'state': "); Serial.println(state);
+      if ( client.connect(TSserver, 80) )
+      {
+        String sendData = apiKey+"&field4="+String(state)+"\r\n\r\n";
+        client.print("POST /update HTTP/1.1\n");
+        client.print("Host: api.thingspeak.com\n");
+        client.print("Connection: close\n");
+        client.print("X-THINGSPEAKAPIKEY: "+apiKey+"\n");
+        client.print("Content-Type: application/x-www-form-urlencoded\n");
+        client.print("Content-Length: ");
+        client.print(sendData.length());
+        client.print("\n\n");
+        client.print(sendData);  
+      }
     stateChange = false;
     client.stop();
   }

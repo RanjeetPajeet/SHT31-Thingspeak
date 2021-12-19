@@ -9,7 +9,7 @@ const char* TSserver = "api.thingspeak.com";      // Thingspeak API server
 const String apiKey = "8C5RJLITHO074GJ5";         // Thingspeak write API key
 
 const int relayPin = 5;                           // Relay signal wire connected to pin D1 on ESP (D1 = GPIO 5)
-const int port = 301;                             // Port through which requests are routed through
+const int port = 420;                             // Port through which requests are routed through
 
 WiFiServer server(port);
 

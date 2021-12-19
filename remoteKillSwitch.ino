@@ -56,48 +56,51 @@ void loop()
     return;
   }
 
-  while ( !client.available() )                   // Wait for client to send data
+  if ( client )
   {
-    delay(1);
-  }
+    delay(50);
 
-  String req = client.readStringUntil('\r');      // Read first line of request
-  client.flush();
-
-  if ( req.indexOf("") != -10 )                   // Match the client's request
-  {
-    if ( req.indexOf("/OFF") != -1 )              // Check for OFF request
+    if ( client.available() )
     {
-      digitalWrite(relayPin, LOW);
-      Serial.println("You clicked OFF");
+      String req = client.readStringUntil('\r');      // Read first line of request
+      Serial.print("Client request: "); Serial.println(req);
+      client.flush();
+
+      if ( req.indexOf("") != -10 )                   // Match the client's request
+      {
+        if ( req.indexOf("/OFF") != -1 )              // Check for OFF request
+        {
+          digitalWrite(relayPin, LOW);
+          Serial.println("You clicked OFF");
+        }
+        if ( req.indexOf("/ON") != -1 )               // Check for ON request
+        {
+          digitalWrite(relayPin, HIGH);
+          Serial.println("You clicked ON");
+        }
+      }
+
+      else
+      {
+        Serial.println("Invalid request");
+        client.stop();
+        return;
+      }
+
+      String s = "HTTP/1.1 200 OK\r\n";                 // Prepare response to client
+      s += "Content-Type: text/html\r\n\r\n";
+      s += "<!DOCTYPE HTML>\r\n<html>\r\n";
+      s += "<br><input type=\"button\" name=\"bl\" value=\"Turn heater ON \" onclick=\"location.href='/ON'\">";
+      s += "<br><br><br>";
+      s += "<br><input type=\"button\" name=\"bl\" value=\"Turn heater OFF\" onclick=\"location.href='/OFF'\">";
+      s += "</html>\n";
+
+      client.flush();
+
+      client.print(s);                                  // Send the response to the client
+      delay(1);
     }
-    if ( req.indexOf("/ON") != -1 )               // Check for ON request
-    {
-      digitalWrite(relayPin, HIGH);
-      Serial.println("You clicked ON");
-    }
+    
   }
 
-  else
-  {
-    Serial.println("Invalid request");
-    client.stop();
-    return;
-  }
-
-  String s = "HTTP/1.1 200 OK\r\n";                 // Prepare response to client
-  s += "Content-Type: text/html\r\n\r\n";
-  s += "<!DOCTYPE HTML>\r\n<html>\r\n";
-  s += "<br><input type=\"button\" name=\"bl\" value=\"Turn heater ON \" onclick=\"location.href='/ON'\">";
-  s += "<br><br><br>";
-  s += "<br><input type=\"button\" name=\"bl\" value=\"Turn heater OFF\" onclick=\"location.href='/OFF'\">";
-  s += "</html>\n";
-
-  client.flush();
-
-  client.print(s);                                  // Send the response to the client
-  delay(1);
-
-
-  
 }

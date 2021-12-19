@@ -88,6 +88,7 @@ void loop()
   {
     if ( client.connect(server, 80) )               // If connected to api.thingspeak.com, send the data
     {
+      delay(100);
       tempmemory[firstiterate] = tf;
       String sendData = apiKey+"&field2="+String(tf)+"\r\n\r\n";
       client.print("POST /update HTTP/1.1\n");
@@ -98,7 +99,9 @@ void loop()
       client.print("Content-Length: ");
       client.print(sendData.length());
       client.print("\n\n");
-      client.print(sendData);   
+      client.print(sendData);
+      delay(100);
+      client.stop();
     }
   }
   
@@ -106,6 +109,7 @@ void loop()
   {
     if ( client.connect(server, 80) )               // If connected to api.thingspeak.com, send the data
     {
+      delay(100);
       float sum = tempmemory[0] + tempmemory[1] + tempmemory[2] + tf;
       float tavg = sum / 4;
       String sendData = apiKey+"&field2="+String(tavg)+"\r\n\r\n";
@@ -118,6 +122,8 @@ void loop()
       client.print(sendData.length());
       client.print("\n\n");
       client.print(sendData);
+      delay(100);
+      client.stop();
       sum = 0;
       tavg = 0;
     }
@@ -129,6 +135,7 @@ void loop()
   {
     if ( client.connect(server, 80) )               // If connected to api.thingspeak.com, send the data
     {
+      delay(100);
       float sum = tempmemory[0] + tempmemory[1] + tempmemory[2] + tf;
       float tavg = sum / 4;
       String sendData = apiKey+"&field2="+String(tavg)+"\r\n\r\n";
@@ -141,6 +148,8 @@ void loop()
       client.print(sendData.length());
       client.print("\n\n");
       client.print(sendData);
+      delay(100);
+      client.stop();
       sum = 0;
       tavg = 0;
     }
@@ -165,6 +174,8 @@ String httpGETRequest(const char* serverName)
   HTTPClient http; 
   http.begin(client, serverName);
   
+  delay(100);
+  
   int httpResponseCode = http.GET();  
   String payload = "{}"; 
   
@@ -177,6 +188,6 @@ String httpGETRequest(const char* serverName)
   }
 
   http.end();
-
+  client.stop();
   return payload; 
 }

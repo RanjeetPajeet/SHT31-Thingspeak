@@ -79,7 +79,7 @@ void loop()
   
   int TMPanalog = 0;
   TMPanalog = analogRead(A0);                       // Read TMP sensor
-  double z = (0.58 * TMPanalog) - 58;               // Convert analog reading to temperature (F)
+  double z = (0.58 * TMPanalog) - 48;               // Convert analog reading to temperature (F). Includes a +10 degree offset
   float TMPtemp = (float)z;                         // Convert temperature from type double to type float
   
   float tf = (APItemp1 + APItemp2 + TMPtemp) / 3;   // Average all outside temperature readings
@@ -135,7 +135,7 @@ void loop()
     tempmemory[iterate] = tf;
     iterate = 1;
   }
-  else if ( (iterate % 4) != 0  &&  firstiterate > 3)
+  else if ( (iterate % 4) != 0  &&  firstiterate > 3 )
   {
     WiFiClient client;
     delay(100);

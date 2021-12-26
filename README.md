@@ -7,5 +7,5 @@ remoteController.ino - direct heater controller ESP
 index.html - data overview page                                   
 
 matthew-kaufman-3@uiowa.edu controls insde temp, humidity, heater state                       
-ranjeetpajeet@gmail.com controls outside temperature                             
+ranjeetpajeet@gmail.com controls outside temperature & hosts prediction chart                             
 fluxonyou@gmail.com controls delta T and predicted inside temp
